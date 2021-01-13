@@ -26,10 +26,13 @@
   background: black;
   margin: auto;
   position: absolute;
-/*  top: -168px;*/
+  /*  top: -168px;*/
   box-shadow: inset 0 0 20px lightseagreen;
-
   border-color: transparent;
   border-width: thin;
   border-style: solid;
+
+  transition: all 50ms linear;
+
+  color:white
 }

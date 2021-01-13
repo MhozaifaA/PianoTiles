@@ -3,20 +3,26 @@
 <h1>
   PianTiles
 </h1>
+<h3>
+  - press F / G / K / L
+</h3>
 
 <button class="btn btn-secondary" (click)="start()">{{textBtn()}}</button>
+<span  class="m-3">key pressed : <strong>{{keyPressed}}</strong> </span>
 
-<div class="board">
+<span class="m-3">speed : <strong>{{speedDelay}}</strong> </span>
 
-  <div class="column">
+<div class="board" >
+
+  <div class="column" [style.background]="columnOneLost" >
     <ng-container *ngFor="let item of tiles | filterColumn:filterOne">
-      <div class="tile" [attr.tile]="item.id" [style.top.px]="item.top">
+      <div class="tile" [attr.tile]="item.id" [style.top.px]="item.top" [style.transition-duration.ms]="speed">
         {{item.id}}
       </div>
     </ng-container>
   </div>
 
-  <div class="column">
+  <div class="column" [style.background]="columnTwoLost">
     <ng-container *ngFor="let item of tiles| filterColumn:filterTwo">
       <div class="tile" [attr.tile]="item.id" [style.top.px]="item.top">
         {{item.id}}
@@ -24,7 +30,7 @@
     </ng-container>
   </div>
 
-  <div class="column">
+  <div class="column" [style.background]="columnThreeLost">
     <ng-container *ngFor="let item of tiles| filterColumn:filterThree">
       <div class="tile" [attr.tile]="item.id" [style.top.px]="item.top">
         {{item.id}}
@@ -32,7 +38,7 @@
     </ng-container>
   </div>
 
-  <div class="column">
+  <div class="column"  [style.background]="columnFourLost">
     <ng-container *ngFor="let item of tiles| filterColumn:filterFour">
       <div class="tile" [attr.tile]="item.id" [style.top.px]="item.top">
         {{item.id}}
