@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, HostBinding, HostListener } from '@angular/core';
+import { Key } from 'protractor';
 
 @Component({
   selector: 'app-pianoTiles',
@@ -10,7 +11,7 @@ import { Component, OnInit, HostBinding, HostListener } from '@angular/core';
       state(
         "from",
         style({
-          top: '-168px',
+          top: '0px',
         })
       ),
       state(
@@ -74,78 +75,68 @@ import { Component, OnInit, HostBinding, HostListener } from '@angular/core';
 })
 
 export class PianoTilesComponent implements OnInit {
-  isGo: boolean = false;
-  
-  tiles = {
-    one: new Tile("one", 0, true, states.from),
-    two: new Tile("two", 0, true, states.from),
-    three: new Tile("three", 0, true, states.from),
-    four: new Tile("four", 0, true, states.from)
-  };
+
+  textBtn = () => isStart ? 'pause' : 'Start';
+
+  filterOne = { column: columns.one };
+  filterTwo = { column: columns.two };
+  filterThree = { column: columns.three };
+  filterFour = { column: columns.four };
+
+
+  tiles: Array<Tile> = [new Tile(columns.three)];
+
 
   constructor() {
 
   }
 
   ngOnInit(): void {
-    // console.log("f");
+    speed = 1;
   }
-
-
 
   start() {
-    this.isGo = !this.isGo;
-    this.tiles.one.start();
-  }
+    isStart = !isStart;
 
-  animationStarted($event) {
-    // console.log($event.element.getAttribute('tile'));
-  }
+    this.tiles.push(new Tile(columns.three));
 
-  animationDone($event) {
-    //console.log($event.element.getAttribute('tile'));//
-    //if ($event.element.getAttribute('tile') == 4) {
-    //  this.start();
-    //}
+    if (isStart)
+      this.tiles.forEach(tile => tile.start());
+     else 
+      this.tiles.forEach(tile => tile.stop());
+
   }
+ 
+
+
+  //animationStarted($event) {
+   
+  //}
+
+  //animationDone($event) {
+ 
+  //}
 
 
   @HostListener('document:keypress', ['$event']) onkeypress(event: KeyboardEvent) {
 
-    let target: Tile = this.getTargetTile();
-
-    if (target === null)
-      return;
-
     switch (event.keyCode) {
 
       case 102:
-        if (target.column === "one")
-          target.exist = false;
-        else
-          console.log("dead");
+      
         break;
 
       case 103:
 
-        if (target.column === "two")
-          target.exist = false;
-        else
-          console.log("dead");
+       
         break;
 
       case 107:
-        if (target.column === "three")
-          target.exist = false;
-        else
-          console.log("dead");
+       
         break;
 
       case 108:
-        if (target.column === "four")
-          target.exist = false;
-        else
-          console.log("dead");
+      
         break;
 
       default:
@@ -153,41 +144,69 @@ export class PianoTilesComponent implements OnInit {
   }
 
 
-  private getTargetTile(): Tile {
-    let iter = ["one", "two", "three", "four"];
-    let min: number = Number.MAX_VALUE;
+  //private getTargetTile(): Tile {
+  //  let iter = ["one", "two", "three", "four"];
+  //  let min: number = Number.MAX_VALUE;
 
-    iter.forEach(i => {
-      if (this.tiles[i].exist && this.tiles[i].key < min && this.tiles[i].key != 0)
-        min = this.tiles[i].key;
-    });
+  //  iter.forEach(i => {
+  //    if (this.tiles[i].exist && this.tiles[i].key < min && this.tiles[i].key != 0)
+  //      min = this.tiles[i].key;
+  //  });
 
-    if (min === Number.MAX_VALUE)
-      return null;
+  //  if (min === Number.MAX_VALUE)
+  //    return null;
 
-    return this.tiles[iter[min - 1]];
-  }
+  //  return this.tiles[iter[min - 1]];
+  //}
 
 }
 
-
-const states= {
-  from:"from",
-  to:"to",
+const columns = {
+  one: "one",
+  two: "two",
+  three: "three",
+  four: "four",
 }
+
+
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+var id = 0;
+var speed = 1;
+var isStart = false;
+
 class Tile {
-  key: number = 0;
-  exist: boolean = false;
+  id :number;
   column: string = "";
-  state: string;
-  constructor(column: string, key: number, exist: boolean, state: string) {
+  top: number = -168;
+  static readonly maxtop: number = 600;
+  public static speed = 1;
+  private innerStart = false;
+  
+ 
+  constructor(column: string) {
+    this.id = ++id;
     this.column = column;
-    this.key = key;
-    this.exist = exist;
-    this.state = state;
+    this.start();
   }
 
-  start() {
-    this.state = states.to;
+  stop() {
+    this.innerStart = false;
   }
+
+  async start() {
+    if (this.innerStart)
+      return;
+
+    while (!this.isMax() && isStart ) {
+      await delay(10);
+      this.top += speed;
+      this.innerStart = true;
+    }
+    stop();
+  }
+  private isMax = () =>
+    this.top + speed >= Tile.maxtop;
 }
+

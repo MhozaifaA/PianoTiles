@@ -16,7 +16,8 @@
   height: 600px;
   background: lightblue;
   margin: 1px;
-  text-align: center
+  text-align: center;
+  position:relative;
 }
 
 .tile {
@@ -24,6 +25,11 @@
   height: 168px;
   background: black;
   margin: auto;
-  position: relative;
-  top: -168px;
+  position: absolute;
+/*  top: -168px;*/
+  box-shadow: inset 0 0 20px lightseagreen;
+
+  border-color: transparent;
+  border-width: thin;
+  border-style: solid;
 }
