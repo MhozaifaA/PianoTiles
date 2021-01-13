@@ -1,0 +1,29 @@
+
+.board {
+  display: flex;
+  justify-content: center;
+  border-width: 10px;
+  border-color: black;
+  border: inset;
+  width: fit-content;
+  margin: auto;
+  overflow:hidden
+}
+
+
+.column {
+  width: 100px;
+  height: 600px;
+  background: lightblue;
+  margin: 1px;
+  text-align: center
+}
+
+.tile {
+  width: 100%;
+  height: 168px;
+  background: black;
+  margin: auto;
+  position: relative;
+  top: -168px;
+}

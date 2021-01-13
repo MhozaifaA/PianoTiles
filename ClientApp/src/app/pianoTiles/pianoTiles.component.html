@@ -3,3 +3,29 @@
 <h1>
   This is game
 </h1>
+
+<button (click)="start()" >start</button>
+
+<div class="board" >
+
+  <div  class="column">
+    <div *ngIf="tiles.one.exist" [@tileOne]=tiles.one.state class="tile" [attr.tile]="1" (@tileOne.start)="animationStarted($event)"
+        (@tileOne.done)="animationDone($event)" ></div>
+  </div>
+  
+  <div class="column">
+    <div *ngIf="tiles.two.exist" [@tileTwo]=tiles.two.state class="tile" [attr.tile]="2" (@tileTwo.start)="animationStarted($event)"
+        (@tileTwo.done)="animationDone($event)"></div>
+  </div>
+
+  <div class="column">
+    <div *ngIf="tiles.three.exist" [@tileThree]=tiles.three.state class="tile" [attr.tile]="3" (@tileThree.start)="animationStarted($event)"
+        (@tileThree.done)="animationDone($event)"></div>
+  </div>
+
+  <div class="column">
+    <div *ngIf="tiles.four.exist" [@tileFour]=tiles.four.state class="tile" [attr.tile]="4" (@tileFour.start)="animationStarted($event)"
+        (@tileFour.done)="animationDone($event)"></div>
+  </div>
+
+</div>
