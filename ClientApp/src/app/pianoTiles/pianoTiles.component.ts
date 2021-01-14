@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, HostListener } from '@angular/core';
+import { Component, OnInit, HostBinding, HostListener, ViewEncapsulation } from '@angular/core';
 
 
 function delay(ms: number) {
@@ -23,6 +23,7 @@ function randomColumn(min = 1, max = 4): string {
   selector: 'app-pianoTiles',
   templateUrl: './pianoTiles.component.html',
   styleUrls: ['./pianoTiles.component.css'],
+  encapsulation: ViewEncapsulation.None  
 })
 
 export class PianoTilesComponent implements OnInit {
@@ -94,9 +95,9 @@ export class PianoTilesComponent implements OnInit {
         this.lost();
       } else {
         tile.top += this.step;
-        if (tile.top > 0 && !tile.isCross) {
+        if (tile.top > 0 && !tile.getCross()) {
           isGenerate = true;
-          tile.isCross = true;
+          tile.setCross();
         }
       }
     });
@@ -196,30 +197,6 @@ export class PianoTilesComponent implements OnInit {
     this.columnFourLost= this.defaultColumnBg;
   }
 
-  //animationStarted($event) {
-
-  //}
-
-  //animationDone($event) {
-
-  //}
-
-
-  //private getTargetTile(): Tile {
-  //  let iter = ["one", "two", "three", "four"];
-  //  let min: number = Number.MAX_VALUE;
-
-  //  iter.forEach(i => {
-  //    if (this.tiles[i].exist && this.tiles[i].key < min && this.tiles[i].key != 0)
-  //      min = this.tiles[i].key;
-  //  });
-
-  //  if (min === Number.MAX_VALUE)
-  //    return null;
-
-  //  return this.tiles[iter[min - 1]];
-  //}
-
 }
 
 const columns = {
@@ -230,34 +207,18 @@ const columns = {
 }
 
 
-
 var id = 0;
 
 class Tile {
   id: number;
   column: string = "";
   top: number = -168;
-   isCross = false;
+  private isCross  = false;
   constructor(column: string) {
     this.id = ++id;
     this.column = column;
   }
-
- 
-
-  //async start() {
-  //  console.log(this.innerStart);
-  //  if (this.innerStart)
-  //    return;
-
-  //  while (!this.isMax() && isStart ) {
-  //    await delay(10);
-  //    this.top += speed;
-  //    this.innerStart = true;
-  //  }
-  //  stop();
-  //}
-  //private isMax = () =>
-  //  this.top + speed >= Tile.maxtop;
+  setCross = () => this.isCross = true;
+  getCross = () => this.isCross;
 }
 

@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { PianoTilesComponent } from './pianoTiles/pianoTiles.component';
+import { TileComponent } from './pianoTiles/tile.component';
 import { FilterColumn } from './pipes/filterColumn.pipe';
 
 @NgModule({
@@ -20,7 +21,8 @@ import { FilterColumn } from './pipes/filterColumn.pipe';
     CounterComponent,
     FetchDataComponent,
     PianoTilesComponent,
-    FilterColumn
+    FilterColumn,
+    TileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

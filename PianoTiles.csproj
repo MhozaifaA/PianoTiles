@@ -25,11 +25,13 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\pianoTiles\pianoTiles.component.ts" />
+    <None Remove="ClientApp\src\app\pianoTiles\tile.component.ts" />
     <None Remove="ClientApp\src\app\pipes\filterColumn.pipe.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\pianoTiles\pianoTiles.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\pianoTiles\tile.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\pipes\filterColumn.pipe.ts" />
   </ItemGroup>
 

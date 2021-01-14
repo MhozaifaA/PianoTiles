@@ -12,38 +12,23 @@
 <div class="board" >
 
   <div class="column" [style.background]="columnOneLost" >
-    <ng-container *ngFor="let item of tiles | filterColumn:filterOne">
-      <div class="tile" [attr.tile]="item.id" [style.top.px]="item.top" [style.transition-duration.ms]="speed">
-        {{item.id}}
-      </div>
-    </ng-container>
+      <app-tile *ngFor="let item of tiles | filterColumn:filterOne" [id]="item.id" [top]="item.top" [speed]="speed" ></app-tile>
   </div>
 
   <div class="column" [style.background]="columnTwoLost">
-    <ng-container *ngFor="let item of tiles| filterColumn:filterTwo">
-      <div class="tile" [attr.tile]="item.id" [style.top.px]="item.top">
-        {{item.id}}
-      </div>
-    </ng-container>
+      <app-tile  *ngFor="let item of tiles| filterColumn:filterTwo" [id]="item.id" [top]="item.top" [speed]="speed"></app-tile>
   </div>
 
   <div class="column" [style.background]="columnThreeLost">
-    <ng-container *ngFor="let item of tiles| filterColumn:filterThree">
-      <div class="tile" [attr.tile]="item.id" [style.top.px]="item.top">
-        {{item.id}}
-      </div>
-    </ng-container>
+      <app-tile  *ngFor="let item of tiles| filterColumn:filterThree" [id]="item.id" [top]="item.top" [speed]="speed"></app-tile>
   </div>
 
   <div class="column"  [style.background]="columnFourLost">
-    <ng-container *ngFor="let item of tiles| filterColumn:filterFour">
-      <div class="tile" [attr.tile]="item.id" [style.top.px]="item.top">
-        {{item.id}}
-      </div>
-    </ng-container>
+      <app-tile *ngFor="let item of tiles| filterColumn:filterFour" [id]="item.id" [top]="item.top" [speed]="speed"></app-tile>
   </div>
 
 </div>
+
 
 
 
