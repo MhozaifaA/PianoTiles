@@ -1,18 +1,20 @@
-import { Component, OnInit, HostBinding, HostListener, Input, Output, EventEmitter } from '@angular/core';
+import { Component,  Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-tile',
   template: `
-      <div class="tile" [attr.tile] ="id" [style.top.px]="top" [style.transition-duration.ms]="speed" >
-        {{id}}
+      <div (click)="HandelClick()" class="tile" [attr.tile] ="value.id" [style.top.px]="value.top" [style.transition-duration.ms]="speed" >
+      {{value.id}}
       </div>`,
 })
 
 export class TileComponent {
 
-  @Input() public id = 0;
-  @Input() public top = -168;
   @Input() public speed = 50;
+  @Input() public value:any ; //tile
 
+  @Output('onTile') onClick = new EventEmitter<any>();
 
- // @Output() onSignup = new EventEmitter<any>();  
+  HandelClick() {
+    this.onClick.emit(this.value);
+  }
 }

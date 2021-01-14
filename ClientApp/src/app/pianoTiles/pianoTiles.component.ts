@@ -4,9 +4,11 @@ import { Component, OnInit, HostBinding, HostListener, ViewEncapsulation } from 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-function randomColumn(min = 1, max = 4): string {
-  switch (Math.floor(Math.random() * (max - min + 1) + min)) {
+function random(min, max): number {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+function randomColumn(): string {
+  switch (random(1,4)) {
     case 1:
       return columns.one;
     case 2:
@@ -35,8 +37,9 @@ export class PianoTilesComponent implements OnInit {
   readonly maxtop: number = 592;
   step = 10;
   isStart = false;
-  textBtn = () => this.isStart ? 'Restart' : 'Start';
-  speedDelay = 50;
+  textBtn = () => this.isStart ? 'Restart' : 'Start'; 
+  readonly defaultSpeedDelay =50;
+  speedDelay: number;
 
   keyPressed: string;
 
@@ -106,8 +109,21 @@ export class PianoTilesComponent implements OnInit {
   }
 
   generate() {
+    let isTwice = random(0, 10) >= 8 ? true: false;
+
     let tile = new Tile(randomColumn());
     this.tiles.push(tile);
+
+    if (isTwice) {
+      let spilcol = randomColumn();
+      while (tile.column == spilcol) {
+        spilcol = randomColumn();
+      }
+      tile = new Tile(spilcol);
+      this.tiles.push(tile);
+    }
+
+   
     if (tile.id%5==0) {
       this.speedDelay--;
     }
@@ -128,6 +144,18 @@ export class PianoTilesComponent implements OnInit {
       this.lost(this.getColumn(event.keyCode));
     }
  
+  }
+
+  HandelMouseTile(tile: Tile) {
+
+    if (!this.isStart)
+      return;
+
+    if (this.tiles[0].id == tile.id) {
+      this.tiles.shift();
+    } else {
+      this.lost(tile.column);
+    }
   }
 
   lost(column=null) {
@@ -189,7 +217,7 @@ export class PianoTilesComponent implements OnInit {
 
   reset() {
     id = 0;
-    this.speedDelay = 50;
+    this.speedDelay = this.defaultSpeedDelay;
     this.tiles = [];
     this.columnOneLost = this.defaultColumnBg;
     this.columnTwoLost= this.defaultColumnBg;
@@ -209,7 +237,7 @@ const columns = {
 
 var id = 0;
 
-class Tile {
+ class Tile {
   id: number;
   column: string = "";
   top: number = -168;

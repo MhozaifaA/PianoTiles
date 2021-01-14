@@ -11,20 +11,20 @@
 
 <div class="board" >
 
-  <div class="column" [style.background]="columnOneLost" >
-      <app-tile *ngFor="let item of tiles | filterColumn:filterOne" [id]="item.id" [top]="item.top" [speed]="speed" ></app-tile>
+  <div class="column" [style.background]="columnOneLost" [style.animation]="! isStart?'unset':'color_change_col 60s infinite alternate'" >
+      <app-tile (onTile)="HandelMouseTile($event)"  *ngFor="let item of tiles | filterColumn:filterOne" [value]="item" [speed]="speed" ></app-tile>
   </div>
 
-  <div class="column" [style.background]="columnTwoLost">
-      <app-tile  *ngFor="let item of tiles| filterColumn:filterTwo" [id]="item.id" [top]="item.top" [speed]="speed"></app-tile>
+  <div class="column" [style.background]="columnTwoLost"  [style.animation]="! isStart?'unset':'color_change_col 60s infinite alternate'">
+      <app-tile (onTile)="HandelMouseTile($event)"  *ngFor="let item of tiles| filterColumn:filterTwo" [value]="item"  [speed]="speed"></app-tile>
   </div>
 
-  <div class="column" [style.background]="columnThreeLost">
-      <app-tile  *ngFor="let item of tiles| filterColumn:filterThree" [id]="item.id" [top]="item.top" [speed]="speed"></app-tile>
+  <div class="column" [style.background]="columnThreeLost"  [style.animation]="! isStart?'unset':'color_change_col 60s infinite alternate'">
+      <app-tile  (onTile)="HandelMouseTile($event)" *ngFor="let item of tiles| filterColumn:filterThree" [value]="item"  [speed]="speed"></app-tile>
   </div>
 
-  <div class="column"  [style.background]="columnFourLost">
-      <app-tile *ngFor="let item of tiles| filterColumn:filterFour" [id]="item.id" [top]="item.top" [speed]="speed"></app-tile>
+  <div class="column"  [style.background]="columnFourLost"  [style.animation]="! isStart?'unset':'color_change_col 60s infinite alternate'">
+      <app-tile  (onTile)="HandelMouseTile($event)" *ngFor="let item of tiles| filterColumn:filterFour" [value]="item"  [speed]="speed"></app-tile>
   </div>
 
 </div>

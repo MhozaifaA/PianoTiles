@@ -17,7 +17,8 @@
   background: lightblue;
   margin: 1px;
   text-align: center;
-  position:relative;
+  position: relative;
+  animation: color_change_col 60s infinite alternate;
 }
 
 .tile {
@@ -31,8 +32,66 @@
   border-color: transparent;
   border-width: thin;
   border-style: solid;
-
   transition: all 50ms linear;
-
-  color:white
+  color: white;
+  color: darkslategrey; /*2f4f4f52*/
+  font-size: 5em;
+  line-height: 168px;
+  user-select: none;
+  animation: color_change_tile 0.4s infinite alternate;
 }
+
+@keyframes color_change_tile {
+  from {
+    color: darkslategrey;
+  }
+  to {
+    color: #2f4f4f52;
+  }
+}
+
+@keyframes color_change_col {
+
+
+  0% {
+    background: lightblue;
+  }
+
+  10% {
+    background: lightcoral;
+  }
+
+  20% {
+    background: lightgoldenrodyellow;
+  }
+
+  30% {
+    background-color: lightpink;
+  }
+
+  40% {
+    background: lightgreen;
+  }
+
+  50% {
+    background: lightsalmon;
+  }
+
+  60% {
+    background: lightseagreen;
+  }
+  70% {
+    background: lightskyblue;
+  }
+  80% {
+    background: lightsteelblue;
+  }
+  90% {
+    background: lightyellow;
+  }
+  100% {
+    background: lightblue;
+  }
+  
+}
+
