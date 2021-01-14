@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, HostBinding, HostListener } from '@angular/core';
 
 
@@ -24,72 +23,6 @@ function randomColumn(min = 1, max = 4): string {
   selector: 'app-pianoTiles',
   templateUrl: './pianoTiles.component.html',
   styleUrls: ['./pianoTiles.component.css'],
-  animations: [
-    trigger("tileOne", [
-      state(
-        "from",
-        style({
-          top: '0px',
-        })
-      ),
-      state(
-        "to",
-        style({
-          top: '600px',
-        })
-      ),
-      transition("from=>to", animate("1500ms")),
-    ]),
-
-    trigger("tileTwo", [
-      state(
-        "from",
-        style({
-          top: '-168px',
-        })
-      ),
-      state(
-        "to",
-        style({
-          top: '600px',
-        })
-      ),
-      transition("from=>to", animate("1500ms")),
-    ]),
-
-    trigger("tileThree", [
-      state(
-        "from",
-        style({
-          top: '-168px',
-        })
-      ),
-      state(
-        "to",
-        style({
-          top: '600px',
-        })
-      ),
-      transition("from=>to", animate("1500ms")),
-    ]),
-
-    trigger("tileFour", [
-      state(
-        "from",
-        style({
-          top: '-168px',
-        })
-      ),
-      state(
-        "to",
-        style({
-          top: '600px',
-        })
-      ),
-      transition("from=>to", animate("1500ms")),
-    ])
-
-  ]
 })
 
 export class PianoTilesComponent implements OnInit {
