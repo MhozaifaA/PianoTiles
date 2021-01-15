@@ -232,6 +232,8 @@ export class PianoTilesComponent implements OnInit {
     if (!this.isStart)
       return;
 
+    this.keyPressed = "mouse";
+
     this.playAudio();
 
     const first: Tile = this.tiles[0];
