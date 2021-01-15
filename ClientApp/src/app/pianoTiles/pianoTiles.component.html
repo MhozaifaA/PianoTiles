@@ -1,13 +1,16 @@
 
 
-<h3>
-  - press F / G / K / L
-</h3>
+<h4>
+  ⨀ press F / G / K / L / Enter / Mouse
+</h4>
 
-<button class="btn btn-secondary" (click)="start()">{{textBtn()}}</button>
+<button   class="mx-1 btn btn-secondary" (click)="start()">{{textBtn()}}</button>
+
+<button (click)="flipSound()" [ngClass]="sound? 'mx-1 btn btn-warning' : 'mx-1 btn btn-outline-warning'" class="">Sound</button>
+
 <span  class="m-3">key pressed : <strong>{{keyPressed}}</strong> </span>
-
 <span class="m-3">Speed-Delay : <strong>{{speedDelay}}</strong> </span>
+<span class="m-3">Score : <strong>{{score}}</strong> </span>
 
 <div  class="board" >
 

@@ -32,6 +32,21 @@ function randomColumn(): string {
 
 export class PianoTilesComponent implements OnInit {
 
+  sound = true;
+
+  flipSound = () => {
+    this.sound = !this.sound;
+    if (this.sound) {
+      this.backgroundAudio.play();
+    } else {
+      this.backgroundAudio.pause();
+    }
+  };
+
+  backgroundAudio = new Audio("../../../assets/sound/From Nothing To Everything.mp3");
+
+
+  keyEnter = 13;
   keyF = 102;
   keyG = 103;
   keyK = 107;
@@ -42,7 +57,7 @@ export class PianoTilesComponent implements OnInit {
   textBtn = () => this.isStart ? 'Restart' : 'Start';
   readonly defaultSpeedDelay = 50;
   speedDelay: number;
-
+  score: number = 0;
   keyPressed: string;
 
 
@@ -68,7 +83,8 @@ export class PianoTilesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.backgroundAudio.load();
+    this.backgroundAudio.loop = true;
   }
 
   //private isMax = () =>
@@ -131,17 +147,39 @@ export class PianoTilesComponent implements OnInit {
     }
 
 
-    if (tile.row % 5 == 0) {
+    if (tile.row % 5 == 0  ) {
       this.speedDelay--;
+    }
+    if (this.speedDelay < 15) {
+      this.speedDelay = random(15,50);
+    }
+  }
+
+  playAudio() {
+    if (this.sound) {
+      let audio = new Audio();
+      audio.src = `../../../assets/sound/${random(1, 24)}.wav`;
+      audio.load();
+      audio.play();
     }
   }
 
 
+
   @HostListener('document:keypress', ['$event']) onkeypress(event: KeyboardEvent) {
+
+    if (event.keyCode === this.keyEnter) {
+      this.start();
+      return;
+    }
+
 
     this.keyPressed = event.key;
     if (!this.isStart || this.tiles.length === 0 || !this.isEnabelKeys(event.keyCode))
       return;
+
+
+    this.playAudio();
 
     const first: Tile = this.tiles[0];
     const secound: Tile = this.tiles[1];
@@ -165,12 +203,14 @@ export class PianoTilesComponent implements OnInit {
 
     if (keycode === this.getKeyCode(first.column)) {
       this.tiles.shift();
+      this.score++;
     } else if (keycode === this.getKeyCode(secound.column)) {
 
       const index = this.tiles.indexOf(secound, 1);
       if (index > -1) {
         this.tiles.splice(index, 1);
       }
+      this.score++;
     } else {
       this.lost(this.getColumn(keycode));
     }
@@ -179,6 +219,8 @@ export class PianoTilesComponent implements OnInit {
   inRow(first: Tile, keycode: number) {
     if (this.getKeyCode(first.column) === keycode) {
       this.tiles.shift();
+      this.score++;
+
     } else {
       this.lost(this.getColumn(keycode));
     }
@@ -190,7 +232,7 @@ export class PianoTilesComponent implements OnInit {
     if (!this.isStart)
       return;
 
-
+    this.playAudio();
 
     const first: Tile = this.tiles[0];
     const secound: Tile = this.tiles[1];
@@ -201,6 +243,8 @@ export class PianoTilesComponent implements OnInit {
 
       if (first.row === tile.row) {
         this.tiles.shift();
+        this.score++;
+
       } else {
         this.lost(tile.column);
       }
@@ -211,17 +255,22 @@ export class PianoTilesComponent implements OnInit {
 
         if (first.column == tile.column) {
           this.tiles.shift();
+          this.score++;
+
         } else {
           const index = this.tiles.indexOf(secound, 1);
           if (index > -1)
             this.tiles.splice(index, 1);
         }
+        this.score++;
 
 
       } else {
 
         if (first.row === tile.row) {
           this.tiles.shift();
+          this.score++;
+
         } else {
           this.lost(tile.column);
         }
@@ -246,7 +295,7 @@ export class PianoTilesComponent implements OnInit {
     let col = this.tiles[0];
     // delete this.tiles[0];
     this.flipColumnColor(column === null ? col.column : column);
-
+    this.backgroundAudio.pause();
     console.log("lost");
   }
 
@@ -304,12 +353,23 @@ export class PianoTilesComponent implements OnInit {
 
   reset() {
     id = 0;
+    this.score = 0;
     this.speedDelay = this.defaultSpeedDelay;
     this.tiles = [];
     this.columnOneLost = this.defaultColumnBg;
     this.columnTwoLost = this.defaultColumnBg;
     this.columnThreeLost = this.defaultColumnBg;
     this.columnFourLost = this.defaultColumnBg;
+
+    this.backgroundAudio.currentTime = 0;
+
+    if (this.sound && this.isStart) {
+      this.backgroundAudio.play();
+    } else {
+      this.backgroundAudio.pause();
+    }
+
+
   }
 
 }
