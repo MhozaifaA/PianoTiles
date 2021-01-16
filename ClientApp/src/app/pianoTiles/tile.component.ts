@@ -1,4 +1,5 @@
 import { Component,  Input, Output, EventEmitter } from '@angular/core';
+import { Tile } from '../util/Tile';
 @Component({
   selector: 'app-tile',
   template: `
@@ -10,9 +11,9 @@ import { Component,  Input, Output, EventEmitter } from '@angular/core';
 export class TileComponent {
 
   @Input() public speed = 50;
-  @Input() public value:any ; //tile
+  @Input() public value: Tile; //tile
 
-  @Output('onTile') onClick = new EventEmitter<any>();
+  @Output('onTile') onClick = new EventEmitter<Tile>();
 
   HandelClick(event) {
     event.stopPropagation();
