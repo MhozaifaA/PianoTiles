@@ -1,27 +1,9 @@
 import { Component, OnInit, HostBinding, HostListener, ViewEncapsulation } from '@angular/core';
-import { title } from 'process';
 import { isUndefined } from 'util';
+import { columns, getColumn, getKeyCode } from '../util/columns';
+import { delay, randomColumn, randomNextInt } from '../util/help-methods';
+import { Tile } from '../util/Tile';
 
-
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-function random(min, max): number {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-function randomColumn(): string {
-  switch (random(1, 4)) {
-    case 1:
-      return columns.one;
-    case 2:
-      return columns.two;
-    case 3:
-      return columns.three;
-    case 4:
-      return columns.four;
-    default: return "";
-  }
-}
 
 @Component({
   selector: 'app-pianoTiles',
@@ -32,32 +14,28 @@ function randomColumn(): string {
 
 export class PianoTilesComponent implements OnInit {
 
-  sound = true;
-
-  flipSound = () => {
-    this.sound = !this.sound;
-    if (this.sound) {
-      this.backgroundAudio.play();
-    } else {
-      this.backgroundAudio.pause();
-    }
-  };
-
   backgroundAudio = new Audio("../../../assets/sound/From Nothing To Everything.mp3");
 
+  tiles: Array<Tile> = [];
 
-  keyEnter = 13;
-  keyF = 102;
-  keyG = 103;
-  keyK = 107;
-  keyL = 108;
+
   readonly maxtop: number = 592;
-  step = 10;
-  isStart = false;
-  textBtn = () => this.isStart ? 'Restart' : 'Start';
   readonly defaultSpeedDelay = 50;
+
+  readonly keyEnter = 13;
+  readonly keyF = 102;
+  readonly keyG = 103;
+  readonly keyK = 107;
+  readonly keyL = 108;
+
+  isStart = false;
+  sound = true;
+
+  step = 10;
   speedDelay: number;
-  score: number = 0;
+  decrementDelay= 1;
+  tileDelay=5;
+  score= 0;
   keyPressed: string;
 
 
@@ -68,14 +46,10 @@ export class PianoTilesComponent implements OnInit {
   columnThreeLost: string;
   columnFourLost: string;
 
-
   filterOne = { column: columns.one };
   filterTwo = { column: columns.two };
   filterThree = { column: columns.three };
   filterFour = { column: columns.four };
-
-
-  tiles: Array<Tile> = [];
 
 
   constructor() {
@@ -86,9 +60,7 @@ export class PianoTilesComponent implements OnInit {
     this.backgroundAudio.load();
     this.backgroundAudio.loop = true;
   }
-
-  //private isMax = () =>
-  //  this.top + speed >= Tile.maxtop;
+ 
   async start() {
     this.isStart = !this.isStart;
     this.reset();
@@ -102,14 +74,12 @@ export class PianoTilesComponent implements OnInit {
 
   }
 
-
   move(): boolean {
     let isGenerate = false;
 
     if (this.tiles.length === 0) {
       isGenerate = true;
     }
-
 
     for (let i = 0; i < this.tiles.length; i++) {
       let tile = this.tiles[i];
@@ -130,7 +100,7 @@ export class PianoTilesComponent implements OnInit {
   }
 
   generate() {
-    let isTwice = random(0, 10) >= 8 ? true : false;
+    let isTwice = randomNextInt(0, 10) >= 8 ? true : false;
 
     let tile = new Tile(randomColumn());
     this.tiles.push(tile);
@@ -146,26 +116,95 @@ export class PianoTilesComponent implements OnInit {
       this.tiles.push(tile);
     }
 
-
-    if (tile.row % 5 == 0  ) {
-      this.speedDelay--;
+    if (tile.row % this.tileDelay == 0  ) {
+      this.speedDelay -= this.decrementDelay;
     }
     if (this.speedDelay < 15) {
-      this.speedDelay = random(15,50);
+      this.speedDelay = randomNextInt(15,50);
+      this.decrementDelay = randomNextInt(1, 4);
+      this.tileDelay = randomNextInt(5, 20);
     }
   }
 
+  sameRow(first: Tile, secound: Tile, keycode: number) {
+
+    if (keycode === getKeyCode(first.column)) {
+      this.tiles.shift();
+      this.score++;
+    } else if (keycode === getKeyCode(secound.column)) {
+
+      const index = this.tiles.indexOf(secound, 1);
+      if (index > -1) {
+        this.tiles.splice(index, 1);
+      }
+      this.score++;
+    } else {
+      this.lost(getColumn(keycode));
+    }
+  }
+
+  inRow(first: Tile, keycode: number) {
+    if (getKeyCode(first.column) === keycode) {
+      this.tiles.shift();
+      this.score++;
+
+    } else {
+      this.lost(getColumn(keycode));
+    }
+  }
+
+  lost(column = null) {
+    this.isStart = false; // lost
+    let col = this.tiles[0];
+    // delete this.tiles[0];
+    this.flipColumnColor(column === null ? col.column : column);
+    this.backgroundAudio.pause();
+    console.log("lost");
+  }
+
+
+  isEnabelKeys(keycode) {
+    let list = [this.keyF, this.keyG, this.keyK, this.keyL]
+    return list.includes(keycode);
+  }
+
+  flipColumnColor(column) {
+    switch (column) {
+      case columns.one:
+        this.columnOneLost = this.lostColumnBg;
+        break;
+      case columns.two:
+        this.columnTwoLost = this.lostColumnBg;
+        break;
+      case columns.three:
+        this.columnThreeLost = this.lostColumnBg;
+        break;
+      case columns.four:
+        this.columnFourLost = this.lostColumnBg;
+        break;
+    }
+  }
+
+  textBtn = () => this.isStart ? 'Restart' : 'Start';
+  flipSound = () => {
+    this.sound = !this.sound;
+    if (this.sound) {
+      this.backgroundAudio.play();
+    } else {
+      this.backgroundAudio.pause();
+    }
+  };
   playAudio() {
     if (this.sound) {
       let audio = new Audio();
-      audio.src = `../../../assets/sound/${random(1, 24)}.wav`;
+      audio.src = `../../../assets/sound/${randomNextInt(1, 24)}.wav`;
       audio.load();
       audio.play();
     }
   }
 
 
-
+  
   @HostListener('document:keypress', ['$event']) onkeypress(event: KeyboardEvent) {
 
     if (event.keyCode === this.keyEnter) {
@@ -173,11 +212,9 @@ export class PianoTilesComponent implements OnInit {
       return;
     }
 
-
     this.keyPressed = event.key;
     if (!this.isStart || this.tiles.length === 0 || !this.isEnabelKeys(event.keyCode))
       return;
-
 
     this.playAudio();
 
@@ -194,40 +231,9 @@ export class PianoTilesComponent implements OnInit {
       }
     }
 
-
   }
 
-
-
-  sameRow(first: Tile, secound: Tile, keycode: number) {
-
-    if (keycode === this.getKeyCode(first.column)) {
-      this.tiles.shift();
-      this.score++;
-    } else if (keycode === this.getKeyCode(secound.column)) {
-
-      const index = this.tiles.indexOf(secound, 1);
-      if (index > -1) {
-        this.tiles.splice(index, 1);
-      }
-      this.score++;
-    } else {
-      this.lost(this.getColumn(keycode));
-    }
-  }
-
-  inRow(first: Tile, keycode: number) {
-    if (this.getKeyCode(first.column) === keycode) {
-      this.tiles.shift();
-      this.score++;
-
-    } else {
-      this.lost(this.getColumn(keycode));
-    }
-  }
-
-
-  HandelMouseTile(tile: Tile) {
+  handelMouseTile(tile: Tile) {
 
     if (!this.isStart)
       return;
@@ -238,7 +244,6 @@ export class PianoTilesComponent implements OnInit {
 
     const first: Tile = this.tiles[0];
     const secound: Tile = this.tiles[1];
-
 
 
     if (isUndefined(secound)) {
@@ -284,77 +289,15 @@ export class PianoTilesComponent implements OnInit {
 
   }
 
-
   handelBoardClick(col) {
     if (!this.isStart)
       return;
-
     this.lost(col);
   }
 
-  lost(column = null) {
-    this.isStart = false; // lost
-    let col = this.tiles[0];
-    // delete this.tiles[0];
-    this.flipColumnColor(column === null ? col.column : column);
-    this.backgroundAudio.pause();
-    console.log("lost");
-  }
-
-
-
-
-
-  getKeyCode = (column): number => {
-    switch (column) {
-      case columns.one:
-        return this.keyF;
-      case columns.two:
-        return this.keyG;
-      case columns.three:
-        return this.keyK;
-      case columns.four:
-        return this.keyL;
-    }
-  }
-
-  getColumn = (keycode): string => {
-    switch (keycode) {
-      case this.keyF:
-        return columns.one;
-      case this.keyG:
-        return columns.two;
-      case this.keyK:
-        return columns.three;
-      case this.keyL:
-        return columns.four;
-    }
-  }
-
-  isEnabelKeys(keycode) {
-    let list = [this.keyF, this.keyG, this.keyK, this.keyL]
-    return list.includes(keycode);
-  }
-
-  flipColumnColor(column) {
-    switch (column) {
-      case columns.one:
-        this.columnOneLost = this.lostColumnBg;
-        break;
-      case columns.two:
-        this.columnTwoLost = this.lostColumnBg;
-        break;
-      case columns.three:
-        this.columnThreeLost = this.lostColumnBg;
-        break;
-      case columns.four:
-        this.columnFourLost = this.lostColumnBg;
-        break;
-    }
-  }
 
   reset() {
-    id = 0;
+    Tile.rest_id();
     this.score = 0;
     this.speedDelay = this.defaultSpeedDelay;
     this.tiles = [];
@@ -362,40 +305,17 @@ export class PianoTilesComponent implements OnInit {
     this.columnTwoLost = this.defaultColumnBg;
     this.columnThreeLost = this.defaultColumnBg;
     this.columnFourLost = this.defaultColumnBg;
-
     this.backgroundAudio.currentTime = 0;
-
     if (this.sound && this.isStart) {
       this.backgroundAudio.play();
     } else {
       this.backgroundAudio.pause();
     }
 
-
   }
-
-}
-
-const columns = {
-  one: "one",
-  two: "two",
-  three: "three",
-  four: "four",
 }
 
 
-var id = 0;
 
-class Tile {
-  row: number;
-  column: string = "";
-  top: number = -168;
-  private isCross = false;
-  constructor(column: string) {
-    this.row = ++id;
-    this.column = column;
-  }
-  setCross = () => this.isCross = true;
-  getCross = () => this.isCross;
-}
+
 

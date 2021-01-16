@@ -27,12 +27,18 @@
     <None Remove="ClientApp\src\app\pianoTiles\pianoTiles.component.ts" />
     <None Remove="ClientApp\src\app\pianoTiles\tile.component.ts" />
     <None Remove="ClientApp\src\app\pipes\filterColumn.pipe.ts" />
+    <None Remove="ClientApp\src\app\util\columns.ts" />
+    <None Remove="ClientApp\src\app\util\help-methods.ts" />
+    <None Remove="ClientApp\src\app\util\Tile.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\pianoTiles\pianoTiles.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\pianoTiles\tile.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\pipes\filterColumn.pipe.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\util\columns.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\util\help-methods.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\util\Tile.ts" />
   </ItemGroup>
 
   <ItemGroup>
