@@ -14,7 +14,7 @@ import { Tile } from '../util/Tile';
 
 export class PianoTilesComponent implements OnInit {
 
-  backgroundAudio = new Audio("../../../assets/sound/From Nothing To Everything.mp3");
+  backgroundAudio = new Audio("../../../PianoTiles/assets/sound/From Nothing To Everything.mp3");
 
   tiles: Array<Tile> = [];
 
