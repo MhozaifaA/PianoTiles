@@ -197,7 +197,7 @@ export class PianoTilesComponent implements OnInit {
   playAudio() {
     if (this.sound) {
       let audio = new Audio();
-      audio.src = `../../../assets/sound/${randomNextInt(1, 24)}.wav`;
+      audio.src = `../../../PianoTiles/assets/sound/${randomNextInt(1, 24)}.wav`;
       audio.load();
       audio.play();
     }
