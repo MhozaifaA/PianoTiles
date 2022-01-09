@@ -479,7 +479,7 @@ let PianoTilesComponent = class PianoTilesComponent {
     playAudio() {
         if (this.sound) {
             let audio = new Audio();
-            audio.src = `../../../assets/sound/${Object(_util_help_methods__WEBPACK_IMPORTED_MODULE_3__["randomNextInt"])(1, 24)}.wav`;
+            audio.src = `../../../PianoTiles/assets/sound/${Object(_util_help_methods__WEBPACK_IMPORTED_MODULE_3__["randomNextInt"])(1, 24)}.wav`;
             audio.load();
             audio.play();
         }

@@ -791,7 +791,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function playAudio() {
           if (this.sound) {
             var audio = new Audio();
-            audio.src = "../../../assets/sound/".concat(Object(_util_help_methods__WEBPACK_IMPORTED_MODULE_3__["randomNextInt"])(1, 24), ".wav");
+            audio.src = "../../../PianoTiles/assets/sound/".concat(Object(_util_help_methods__WEBPACK_IMPORTED_MODULE_3__["randomNextInt"])(1, 24), ".wav");
             audio.load();
             audio.play();
           }
